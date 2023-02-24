@@ -48,7 +48,7 @@ function nextQuestion(event) {
     var choice = choices[i];
     var isCorrect = currentQuestion.answer === choice; // the boolean is true if the answer matches oue choice
 
-    // create buttons
+    // create buttons with adjacent
     choicesOutput.insertAdjacentHTML(
       "beforeend",
       `
@@ -61,7 +61,6 @@ function nextQuestion(event) {
 
 // checking if the answer is correct
 function checkAnswer(event) {
-  var item = event.target;
   var correctAnswer = event.target.getAttribute("data-correct");
   var feedback = document.querySelector("#feedback");
   feedback.classList.remove("hide");
