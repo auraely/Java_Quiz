@@ -21,12 +21,34 @@ var time = document.querySelector("#time");
 var highScores = document.querySelector(".scores");
 var endScreen = document.querySelector("#end-screen");
 
+//Function for the timer
+function Countdown() {
+  timeLeft = 100;
+
+  var timeInerval = setInterval(function () {
+      time.innerText = timeLeft;
+      timeLeft--;
+      if (timeLeft < 0) {
+          clearTimeout(timeInerval);
+          endScreen.classList.remove('hide')
+          questionsWrap.classList.add('hide')
+          FinalScore()
+      }
+  }, 100)
+
 // Start the quiz
 if (start) {
-  start.addEventListener("click", startQuiz);
+  start.addEventListener("click", Quiz);
 }
 
-function startQuiz(event) {
+function Quiz(event) {
+  startScreen.classList.add("hide");
+  event.preventDefault();
+  Countdown();
+  nextQuestion();
+}
+
+function nextQuestion(event) {
   var currentQuestion = questions[currentQuestionIndex];
   choicesOutput.innerHtml = "";
   questionTitle.innerHtml = "";
@@ -52,17 +74,26 @@ function startQuiz(event) {
   questionWrap.classList.remove("hide"); // we can add or remove a class
 }
 
+// checking if the answer is correct
 function checkAnswer(event) {
-  var item = event.target.getAttribute("data-correct");
-  console.log(item);
-  var message = document.createElement("div");
-  document.body.append(message);
-  if (item === "true") {
-    message.innerText = "Correct";
-    return;
-    //next_question()  //in both cases
+  var item = event.target;
+  var correctAnswer = event.target.getAttribute("data-correct");
+  var feedback = document.querySelector("#feedback");
+  feedback.classList.remove("hide");
+  var correct = new Audio("assets/sfx/correct.wav");
+  var incorrect = new Audio("assets/sfx/incorrect.wav");
+
+  // var message = document.createElement("div");
+  //document.body.append(message);
+  if (correctAnswer === "true") {
+    feedback.innerText = "Correct";
+    correct.play();
+    currentQuestionIndex++;
+    next_question(); //in both cases
   } else {
-    message.innerText = "Wrong";
+    feedback.innerText = "Wrong";
+    incorrect.play();
+    timeleft -= 10;
     //we have to deduct few seconds from the timer
     // choicesOutput.inerHTML = " ";
     next_question(); // maybe put in iside if so it shows after message is displayed
@@ -70,18 +101,3 @@ function checkAnswer(event) {
 }
 choicesOutput.addEventListener("click", checkAnswer);
 
-//function showQuestion() {
-//choicesOutput.inerHTML = " ";
-//questionTitle.innerText=questions[currentQuestionIndex].Title
-
-function next_question() {
-  choices.addEventListener("click", function (event) {
-    if (event.target) {
-      currentQuestionIndex++;
-      questionTitle.innerText = questions[currentQuestionIndex].Title;
-    }
-  });
-}
-//next_question()
-
-//startQuiz()
