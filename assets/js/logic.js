@@ -21,21 +21,6 @@ var time = document.querySelector("#time");
 var highScores = document.querySelector(".scores");
 var endScreen = document.querySelector("#end-screen");
 
-//Function for the timer
-function Countdown() {
-  timeLeft = 100;
-
-  var timeInerval = setInterval(function () {
-      time.innerText = timeLeft;
-      timeLeft--;
-      if (timeLeft < 0) {
-          clearTimeout(timeInerval);
-          endScreen.classList.remove('hide')
-          questionsWrap.classList.add('hide')
-          FinalScore()
-      }
-  }, 100)
-
 // Start the quiz
 if (start) {
   start.addEventListener("click", Quiz);
@@ -99,5 +84,24 @@ function checkAnswer(event) {
     next_question(); // maybe put in iside if so it shows after message is displayed
   }
 }
-choicesOutput.addEventListener("click", checkAnswer);
 
+// Prints final score to page
+function FinalScore() {
+  finalScore.innerText = timeLeft;
+}
+
+//function for the timer
+function Countdown() {
+  timeLeft = 100;
+
+  var timeInerval = setInterval(function () {
+    time.innerText = timeLeft;
+    timeLeft--;
+    if (timeLeft < 0) {
+      clearTimeout(timeInerval);
+      endScreen.classList.remove("hide");
+      questionsWrap.classList.add("hide");
+      FinalScore();
+    }
+  }, 100);
+}
